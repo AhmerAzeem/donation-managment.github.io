@@ -102,5 +102,5 @@
         </section>
         <!-- /.content -->
     </div>
-    @include('funds.js.index')
+    @include('admin.funds.js.index')
 @endsection

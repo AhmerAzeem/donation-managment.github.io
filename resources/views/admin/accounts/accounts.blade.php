@@ -28,6 +28,14 @@
                     <!-- /.col -->
                     <div class="col-md-12">
                         <div class="card">
+                            @if (Session::has('success'))
+                                <p class="pb-1 pt-1 alert-success alert">
+                                    {{ Session::get('success') }}
+                                    @php
+                                        Session::forget('success');
+                                    @endphp
+                                </p>
+                            @endif
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
@@ -41,17 +49,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $rowNumber = 1;
+                                        @endphp
                                         @forelse ($accounts as $account)
                                             <tr>
-                                                <td>1</td>
+                                                <td>{{ $rowNumber++ }}</td>
                                                 <td>{{ $account->id }}</td>
                                                 <td>{{ $account->name }}</td>
                                                 <td>{{ $account->status }}</td>
                                                 <td>
                                                     @if ($account->status == 'Active')
-                                                        <a href="" class="btn btn-danger">Deactivate</a>
-                                                    @elseif($account->status == 'deactive')
-                                                        <a href="" class="btn btn-primary">Activate</a>
+                                                        <a href="{{ route('account.status', ['id' => $account->id]) }}"
+                                                            class="btn btn-danger">Deactivate</a>
+                                                    @elseif($account->status == 'Inactive')
+                                                        <a href="{{ route('account.status', ['id' => $account->id]) }}"
+                                                            class="btn btn-primary">Activate</a>
                                                     @endif
                                                 </td>
                                             </tr>

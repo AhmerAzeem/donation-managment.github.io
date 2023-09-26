@@ -24,4 +24,37 @@ class AccountController extends Controller
 
         return "Account created successfully";
     }
+
+    public function status($id)
+    {
+        $account = Accounts::find($id);
+
+        if ($account->status == 'Active') {
+            $status = 'Inactive';
+        } else {
+            $status = 'Active';
+        }
+
+        Accounts::where('id', $id)->update(['status' => $status]);
+
+        return redirect()->back()->with('success', 'Status Changed Successfully');
+    }
+
+    public function getAccounts()
+    {
+        $accounts = Accounts::all(); // Assuming "Account" is the model name
+
+        $accountOptions = [];
+
+        foreach ($accounts as $account) {
+            $accountOptions[$account->id] = $account->name;
+        }
+
+        return response()->json($accountOptions);
+    }
+
+    public function searchAccount()
+    {
+        return view('admin.accounts.ledger');
+    }
 }

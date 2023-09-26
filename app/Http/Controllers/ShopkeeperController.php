@@ -50,29 +50,14 @@ class ShopkeeperController extends Controller
         return redirect()->back()->with('success', 'Shopkeeper Added Successfully');
     }
 
-    public function deactivate($id)
+    public function status($id)
     {
         $shopkeeper = Shopkeeper::find($id);
 
-        if ($shopkeeper->status == 'active') {
-            $status = 'deactive';
+        if ($shopkeeper->status == 'Active') {
+            $status = 'Inactive';
         } else {
-            $status = 'active';
-        }
-
-        Shopkeeper::where('id', $id)->update(['status' => $status]);
-
-        return redirect()->back()->with('success', 'Status Changed Successfully');
-    }
-
-    public function activate($id)
-    {
-        $shopkeeper = Shopkeeper::find($id);
-
-        if ($shopkeeper->status == 'active') {
-            $status = 'deactive';
-        } else {
-            $status = 'active';
+            $status = 'Active';
         }
 
         Shopkeeper::where('id', $id)->update(['status' => $status]);

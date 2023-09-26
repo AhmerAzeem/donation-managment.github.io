@@ -51,9 +51,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $rowNumber = 1;
+                                        @endphp
                                         @forelse ($shopkeepers as $shopkeeper)
                                             <tr>
-                                                <td>{{ $shopkeeper->id }}</td>
+                                                <td>{{ $rowNumber++ }}</td>
                                                 <td>{{ $shopkeeper->name }}</td>
                                                 <td>{{ $shopkeeper->phone }}</td>
                                                 <td>{{ $shopkeeper->cnic }}</td>
@@ -62,10 +65,10 @@
                                                 <td>{{ $shopkeeper->home_address }}</td>
                                                 <td>
                                                     @if ($shopkeeper->status == 'Active')
-                                                        <a href="{{ url('/Inactive', $shopkeeper->id) }}"
+                                                        <a href="{{ route('shopkeeper.status', ['id' => $shopkeeper->id]) }}"
                                                             class="btn btn-danger">Deactivate</a>
-                                                    @elseif($shopkeeper->status == 'deactive')
-                                                        <a href="{{ url('/activate', $shopkeeper->id) }}"
+                                                    @elseif($shopkeeper->status == 'Inactive')
+                                                        <a href="{{ route('shopkeeper.status', ['id' => $shopkeeper->id]) }}"
                                                             class="btn btn-primary">Activate</a>
                                                     @endif
 

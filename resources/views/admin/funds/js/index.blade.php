@@ -34,6 +34,32 @@
                 }
             });
 
+            $.ajax({
+                url: "{{ route('account.index') }}",
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var select = $(
+                        '.accountfield'
+                    ); // Assuming '.accountfield' is the class of your select element
+
+                    select.empty(); // Clear existing options
+
+                    select.append($('<option></option>')
+                        .attr('value', '') // Set value to an empty string
+                        .text('Select an Account'));
+
+                    $.each(response, function(value, text) {
+                        select.append($('<option></option>')
+                            .attr('value', value)
+                            .text(text));
+                    });
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+
             $("#generatefund input[name='generate']").change(function() {
                 const generatefee = $(this).val();
 
@@ -174,10 +200,13 @@
                                         })
 
                                         $('#modal-xl').removeClass('show')
-                                        $('#modal-xl').removeAttr('style')
-                                        $('#modal-xl').removeAttr('role')
-                                        $('#modal-xl').removeAttr('aria-modal')
+
                                         $('.modal-backdrop').addClass('d-none')
+
+                                        setTimeout(function() {
+
+                                            location.reload();
+                                        }, 1000);
                                     },
                                     error: function(xhr) {
                                         console.log(xhr.responseText)
@@ -224,10 +253,12 @@
                             })
 
                             $('#modal-lg').removeClass('show')
-                            $('#modal-lg').removeAttr('style')
-                            $('#modal-lg').removeAttr('role')
-                            $('#modal-lg').removeAttr('aria-modal')
                             $('.modal-backdrop').addClass('d-none')
+
+                            setTimeout(function() {
+
+                                location.reload();
+                            }, 1000);
                         },
                         error: function(xhr) {
                             console.log(xhr.responseText)
@@ -235,6 +266,184 @@
                     })
                 }
             })
+
+            let rowNumber = 1;
+            $("#saveexpenses_form").on('submit', function(event) {
+                event.preventDefault();
+
+                const accountid = $("#saveexpenses_form select[name='account']").val();
+                const date = $("#saveexpenses_form input[name='date']").val();
+                const amount = $("#saveexpenses_form input[name='amount']").val();
+                const narration = $("#saveexpenses_form input[name='narration']").val();
+                const billno = $("#saveexpenses_form input[name='billno']").val();
+
+                if (accountid === '') {
+                    $('.account_alert').removeClass('d-none')
+                    $(".account_alert").html("Account field is required")
+                } else if (date === '') {
+                    $(".date_alert").removeClass('d-none')
+                    $(".date_alert").html("Date is required.")
+                } else if (amount === '') {
+                    $(".amount_alert").removeClass('d-none')
+                    $(".amount_alert").html("Amount is required.")
+
+                } else if (narration === '') {
+                    $(".narration_alert").removeClass('d-none')
+                    $(".narration_alert").html("Narration is required.")
+                } else {
+                    var formData = {
+                        accountid: accountid,
+                        date: date,
+                        amount: amount,
+                        narration: narration,
+                        billno: billno,
+                        rowNumber: rowNumber
+                    };
+
+
+                    $.ajax({
+                        url: "{{ route('addexpenses.data') }}",
+                        method: "get",
+                        data: {
+                            formData
+                        },
+                        success: function(response) {
+                            $("#expensesbody").append(response);
+                            rowNumber++;
+                            toggleSubmitButton();
+                            $("#saveexpenses_form")[0].reset();
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText)
+
+                        }
+                    })
+                    // Proceed with form submission or other actions
+                }
+
+
+
+            })
+
+            function toggleSubmitButton() {
+                if ($('#expensesbody tr').length > 0) {
+                    $('#addexpenseform_btn').removeClass('d-none');
+                } else {
+                    $('#addexpenseform_btn').addClass('d-none');
+                }
+            }
+
+
+            $("#addexpense_form").on('submit', function(event) {
+                event.preventDefault();
+
+                var formData = [];
+
+                $("#expenses_table tbody tr").each(function(index) {
+                    var row = $(this);
+
+                    var accountid = row.find('input[name="accountid"]').val();
+                    var date = row.find('input[name="date"]').val();
+                    var amount = row.find('input[name="amount"]').val();
+                    var narration = row.find('input[name="narration"]').val();
+                    var billno = row.find('input[name="billno"]').val();
+
+                    var rowData = {
+                        accountid: accountid,
+                        date: date,
+                        amount: amount,
+                        narration: narration,
+                        billno: billno,
+                    };
+
+                    formData.push(rowData);
+
+                })
+
+                $.ajax({
+                    url: "{{ route('add.expenses') }}",
+                    method: "get",
+                    data: {
+                        formData
+                    },
+                    success: function(response) {
+                        $(document).Toasts('create', {
+                            class: 'bg-success',
+                            title: 'Success',
+                            body: response
+                        })
+                        $("#expenses_table tbody tr").remove();
+
+                        setTimeout(function() {
+
+                            location.reload();
+                        }, 1000);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                })
+
+
+            })
+
+            $("#expenses_table").on("click", ".editexpense_btn", function() {
+                // Find the parent <tr> element and remove it
+                $(this).closest("tr").remove();
+                var accountid = $(this).data("account");
+                var date = $(this).data("date");
+                var amount = $(this).data("amount");
+                var narration = $(this).data("narration");
+                var billno = $(this).data("bill");
+
+                $("#saveexpenses_form select[name='account']").val(accountid)
+                $("#saveexpenses_form input[name='date']").val(date)
+                $("#saveexpenses_form input[name='amount']").val(amount)
+                $("#saveexpenses_form input[name='narration']").val(narration)
+                $("#saveexpenses_form input[name='billno']").val(billno)
+
+            });
+
+
+            $("#searchledger_form").on('submit', function(event) {
+                event.preventDefault();
+
+                const account = $("#searchledger_form select[name='account']").val();
+                const fromdate = $("#searchledger_form input[name='fromdate']").val();
+                const todate = $("#searchledger_form input[name='todate']").val();
+
+                if (account === '') {
+                    $(".account_alert").removeClass('d-none')
+                    $(".account_alert").html("Account is required")
+                } else if (fromdate === '') {
+                    $(".fromdate_alert").removeClass('d-none')
+                    $(".fromdate_alert").html("From Date is required")
+                } else if (todate === '') {
+                    $(".todate_alert").removeClass('d-none')
+                    $(".todate_alert").html("To Date is required")
+                } else {
+                    $.ajax({
+                        url: "{{ route('search.ledger') }}", // Replace with the actual URL
+                        method: "get",
+                        data: {
+                            account: account,
+                            fromdate: fromdate,
+                            todate: todate,
+                            rowNumber: rowNumber
+                        },
+                        success: function(response) {
+                            $("#ledger_table tbody tr").remove();
+                            $("#ledgerbody").append(response);
+                            rowNumber++;
+                            $("#searchledger_form")[0].reset();
+                        },
+                        error: function(xhr) {
+                            console.log(xhr.responseText);
+                            // Handle the error, e.g., display an error message to the user
+                        }
+                    });
+                }
+            });
         })
     </script>
 @endpush

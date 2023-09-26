@@ -91,7 +91,8 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item @if (Request::segment(1) == 'accounts') menu-open @endif" id="fundsmenu">
+                <li class="nav-item @if (Request::segment(1) == 'accounts') menu-open @endif @if (Request::segment(1) == 'ledger') menu-open @endif"
+                    id="fundsmenu">
                     <a href="#" class="nav-link  @if (Request::segment(1) == 'accounts') active @endif">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
@@ -105,6 +106,13 @@
                                 class="nav-link  @if (Request::segment(1) == 'accounts') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Manage Accounts</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('search.account') }}"
+                                class="nav-link @if (Request::segment(1) == 'ledger') active @endif">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Search Ledger</p>
                             </a>
                         </li>
                     </ul>
