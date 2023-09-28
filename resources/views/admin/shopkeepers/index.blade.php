@@ -10,7 +10,8 @@
                         <h1 class="m-0">Shopkeepers</h1>
                     </div>
                     <div class="col-sm-6">
-                        <a href="{{ route('add.shopkeeper') }}" class="btn btn-primary float-right"><i class="fas fa-plus"></i>
+                        <a href="{{ route('shopkeepers.create') }}" class="btn btn-primary float-right"><i
+                                class="fas fa-plus"></i>
                             Add Shopkeeper</a>
 
                     </div>
@@ -45,8 +46,8 @@
                                             <th>Phone</th>
                                             <th>CNIC</th>
                                             <th>Shop #</th>
-                                            <th>Address</th>
-                                            <th>Home Address</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -61,18 +62,19 @@
                                                 <td>{{ $shopkeeper->phone }}</td>
                                                 <td>{{ $shopkeeper->cnic }}</td>
                                                 <td>{{ $shopkeeper->shop_no }}</td>
-                                                <td>{{ $shopkeeper->address }}</td>
-                                                <td>{{ $shopkeeper->home_address }}</td>
+                                                <td>{{ $shopkeeper->amount }}</td>
+                                                <td>{{ implode(',',$shopkeeper->categories()->pluck('name')->toArray()) }}
+                                                </td>
                                                 <td>
                                                     @if ($shopkeeper->status == 'Active')
-                                                        <a href="{{ route('shopkeeper.status', ['id' => $shopkeeper->id]) }}"
+                                                        <a href="{{ route('shopkeepers.status', $shopkeeper->id) }}"
                                                             class="btn btn-danger">Deactivate</a>
                                                     @elseif($shopkeeper->status == 'Inactive')
-                                                        <a href="{{ route('shopkeeper.status', ['id' => $shopkeeper->id]) }}"
+                                                        <a href="{{ route('shopkeepers.status', $shopkeeper->id) }}"
                                                             class="btn btn-primary">Activate</a>
                                                     @endif
 
-                                                    <a href="{{ route('getedit.shopkeeper', $shopkeeper->id) }}"
+                                                    <a href="{{ route('shopkeepers.edit', $shopkeeper->id) }}"
                                                         class="btn btn-primary">Edit</a>
                                                     <button type="button" class="btn openrecievefund_modal"
                                                         data-toggle="modal" data-target="#modal-xl"

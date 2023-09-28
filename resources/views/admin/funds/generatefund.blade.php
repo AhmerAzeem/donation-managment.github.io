@@ -86,14 +86,6 @@
                                             </p>
                                         @endif
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Amount</label>
-                                        <input type="number" name="amount" class="form-control" id="exampleInputEmail1"
-                                            placeholder="Enter Amount" value="{{ old('amount') }}">
-                                        @error('amount')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
                                     <div class="form-check">
                                         <input type="radio" class="form-check-input" value="forall" name="generate"
                                             id="exampleCheck1" checked>

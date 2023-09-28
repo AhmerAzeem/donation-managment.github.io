@@ -38,18 +38,18 @@
                 data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link @if (Request::segment(1) == 'dashboard') active @endif">
+                    <a href="{{ route('dashboard') }}" class="nav-link @if (Request::segment(2) == 'dashboard') active @endif">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
                         </p>
                     </a>
                 </li>
-                <li class="nav-item @if (Request::segment(1) == 'shopkeepers') menu-open @endif  @if (Request::segment(1) == 'add-shopkeeper') menu-open @endif"
+                <li class="nav-item @if (Request::segment(2) == 'shopkeepers') menu-open @endif  @if (Request::segment(2) == 'add-shopkeeper') menu-open @endif"
                     id="shopkeepermenu">
                     <a href="#"
-                        class="nav-link @if (Request::segment(1) == 'shopkeepers') active @endif  @if (Request::segment(1) == 'add-shopkeeper') active @endif">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        class="nav-link @if (Request::segment(2) == 'shopkeepers') active @endif  @if (Request::segment(2) == 'add-shopkeeper') active @endif">
+                        <i class="nav-icon fas fa-store"></i>
                         <p>
                             Shopkeepers
                             <i class="right fas fa-angle-left"></i>
@@ -57,15 +57,15 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('add.shopkeeper') }}"
-                                class="nav-link @if (Request::segment(1) == 'add-shopkeeper') active @endif">
+                            <a href="{{ route('shopkeepers.create') }}"
+                                class="nav-link {{ request()->routeIs('shopkeepers.create') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Add Shopkeeper</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('manage.shopkeepers') }}"
-                                class="nav-link @if (Request::segment(1) == 'shopkeepers') active @endif">
+                            <a href="{{ route('shopkeepers.index') }}"
+                                class="nav-link {{ request()->routeIs('shopkeepers.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Manage Shopkeepers</p>
                             </a>
@@ -73,8 +73,8 @@
 
                     </ul>
                 </li>
-                <li class="nav-item @if (Request::segment(1) == 'fund') menu-open @endif" id="fundsmenu">
-                    <a href="#" class="nav-link  @if (Request::segment(1) == 'fund') active @endif">
+                <li class="nav-item @if (Request::segment(2) == 'fund') menu-open @endif" id="fundsmenu">
+                    <a href="#" class="nav-link  @if (Request::segment(2) == 'fund') active @endif">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Funds
@@ -84,16 +84,16 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('generate.fund') }}"
-                                class="nav-link  @if (Request::segment(1) == 'fund') active @endif">
+                                class="nav-link  @if (Request::segment(2) == 'fund') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Generate Fund</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item @if (Request::segment(1) == 'accounts') menu-open @endif @if (Request::segment(1) == 'ledger') menu-open @endif"
+                <li class="nav-item @if (Request::segment(2) == 'accounts') menu-open @endif @if (Request::segment(2) == 'ledger') menu-open @endif"
                     id="fundsmenu">
-                    <a href="#" class="nav-link  @if (Request::segment(1) == 'accounts') active @endif">
+                    <a href="#" class="nav-link  @if (Request::segment(2) == 'accounts') active @endif">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Accounts
@@ -103,14 +103,14 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('manage.account') }}"
-                                class="nav-link  @if (Request::segment(1) == 'accounts') active @endif">
+                                class="nav-link  @if (Request::segment(2) == 'accounts') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Manage Accounts</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('search.account') }}"
-                                class="nav-link @if (Request::segment(1) == 'ledger') active @endif">
+                                class="nav-link @if (Request::segment(2) == 'ledger') active @endif">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Search Ledger</p>
                             </a>
@@ -119,10 +119,19 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('expenses') }}"
-                        class="nav-link @if (Request::segment(1) == 'expenses') active @endif">
+                        class="nav-link @if (Request::segment(2) == 'expenses') active @endif">
                         <i class="nav-icon fas fa-money-bill"></i>
                         <p>
                             Expenses
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('manage.categories') }}"
+                        class="nav-link @if (Request::segment(2) == 'categories') active @endif">
+                        <i class="nav-icon fas fa-list-alt"></i>
+                        <p>
+                            Categories
                         </p>
                     </a>
                 </li>

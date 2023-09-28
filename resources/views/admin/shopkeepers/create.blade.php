@@ -32,7 +32,8 @@
 
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="{{ url('/create') }}" id="quickForm" method="post" novalidate="novalidate">
+                            <form action="{{ route('shopkeepers.store') }}" id="quickForm" method="post"
+                                novalidate="novalidate">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -74,12 +75,20 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Home Address <span
-                                                style="font-size:12px">(Optional)</span></label>
-                                        <input type="text" name="home_address" class="form-control"
-                                            placeholder="Enter home address" value="{{ old('home_address') }}">
+                                        <label for="amount">Amount</label>
+                                        <input type="number" name="amount" class="form-control" id="amount"
+                                            placeholder="Enter Fund amount" value="{{ old('amount') }}">
                                     </div>
-
+                                    <div class="form-group">
+                                        <label>Category</label>
+                                        <select class="select2bs4 categoryfield" multiple="multiple" name="category[]"
+                                            data-placeholder="Select a Category" style="width: 100%;">
+                                            <option value="">--Select category--</option>
+                                            @foreach ($categories as $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -102,4 +111,5 @@
         <!-- /.content -->
     </div>
     @include('admin.funds.js.index')
+    @include('admin.shopkeepers.js.create')
 @endsection

@@ -11,4 +11,15 @@ class Shopkeeper extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id', '_token', '_method'];
+
+
+    /**
+     * The categories that belong to the Shopkeeper
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

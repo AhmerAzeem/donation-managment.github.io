@@ -10,15 +10,6 @@ use Illuminate\Support\Carbon;
 
 class FundController extends Controller
 {
-    public function todayFunds()
-    {
-        $date = date('Y-m-d');
-
-        $todayFunds = RecieveFund::where('date', $date)->sum('amount');
-
-        return $todayFunds;
-    }
-
 
     public function generate(Request $request)
     {
@@ -30,16 +21,6 @@ class FundController extends Controller
             } elseif ($request->year == '0') {
                 return redirect()->back()->with('year', 'Year field is required');
             }
-
-            $validated = $request->validate([
-                'amount' => 'required',
-            ], [
-                'amount.required' => 'Amount field is required.',
-
-            ]);
-
-
-
             $successMessage = 'Funds generated successfully';
             $error = false;
 
@@ -59,8 +40,8 @@ class FundController extends Controller
                         ],
                         [
                             'name' => $shopkeeper->name,
-                            'amount' => $request->amount, // Adjust this as needed
-                            'due_amount' => $request->amount, // Adjust this as needed
+                            'amount' => $shopkeeper->amount, // Adjust this as needed
+                            'due_amount' => $shopkeeper->amount, // Adjust this as needed
                         ]
                     );
                 } else {
@@ -81,13 +62,6 @@ class FundController extends Controller
                 return redirect()->back()->with('year', 'Year field is required');
             }
 
-            $validated = $request->validate([
-                'amount' => 'required',
-            ], [
-                'amount.required' => 'Amount field is required.',
-
-            ]);
-
             $shopkeepersid = Shopkeeper::where('id', $request->shopkeeperid)->first();
 
 
@@ -99,8 +73,8 @@ class FundController extends Controller
                 ],
                 [
                     'name' => $shopkeepersid->name,
-                    'amount' => $request->amount,
-                    'due_amount' => $request->amount,
+                    'amount' => $shopkeepersid->amount,
+                    'due_amount' => $shopkeepersid->amount,
                 ]
             );
 
@@ -158,9 +132,6 @@ class FundController extends Controller
 
         foreach ($requestData as $data) {
             if (isset($data['receivedamount']) && $data['receivedamount'] !== "NaN") {
-
-
-
                 $recievedFund = RecieveFund::where('id', $data['id'])->first();
 
                 if (!$recievedFund) {
@@ -175,9 +146,7 @@ class FundController extends Controller
                     ]);
                 } else {
                     $oldReceivedFund = $recievedFund->amount;
-
                     $recievedFund->amount = $oldReceivedFund + $data['receivedamount'];
-
                     $recievedFund->save();
                 }
 

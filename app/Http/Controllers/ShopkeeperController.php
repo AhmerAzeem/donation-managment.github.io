@@ -2,52 +2,76 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Shopkeeper;
+use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\UpdateShopkeeperRequest;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Models\{Shopkeeper, Category, CategoryShopkeeper};
+use Illuminate\Validation\Rule;
 
 class ShopkeeperController extends Controller
 {
 
+    private $categories;
+
+    public function __construct()
+    {
+        $this->categories = Category::where('status', 'Active')->get();
+    }
+
     public function index()
     {
-        $shopkeepers = Shopkeeper::get();
-        return view('admin.shopkeepers.shopkeeper', compact('shopkeepers'));
+        if (request()->ajax()) {
+            return Shopkeeper::find(request()->id)->pluck('name')->first();
+        }
+        $shopkeepers = Shopkeeper::with('categories')->orderBy('id', 'desc')->get();
+
+        return view('admin.shopkeepers.index', get_defined_vars());
     }
 
-    public function shopkeepersIndex()
+    public function create()
     {
-        $shopkeepers = Shopkeeper::get();
-
-        $numRows = $shopkeepers->count();
-
-        return $numRows;
+        $categories = $this->categories;
+        return view('admin.shopkeepers.create', get_defined_vars());
     }
 
-    public function store(Request $request)
+
+    public function store(CategoryStoreRequest $request)
     {
+        $shopkeeper = Shopkeeper::create($request->validated());
 
-        $validated = $request->validate([
-            'name' => 'required',
-            'phone' => 'required|string|size:11',
-            'cnic' => 'required|string|size:13',
-            'address' => 'required',
-        ]);
-
-        $shopkeeper = Shopkeeper::create($validated);
+        $shopkeeper->categories()->attach($request->category);
 
         if ($request->has('shopno') && $request->filled('shopno')) {
             $shopkeeper->shop_no = $request->input('shopno');
             $shopkeeper->save();
         }
 
-        if ($request->has('home_address') && $request->filled('home_address')) {
-            $shopkeeper->home_address = $request->input('home_address');
+        if ($request->has('cnic') && $request->filled('cnic')) {
+            $shopkeeper->cnic = $request->input('cnic');
+            $shopkeeper->save();
+        }
+        if ($request->has('amount') && $request->filled('amount')) {
+            $shopkeeper->amount = $request->input('amount');
             $shopkeeper->save();
         }
 
         return redirect()->back()->with('success', 'Shopkeeper Added Successfully');
+    }
+
+
+
+    public function edit(Request $request, Shopkeeper $shopkeeper)
+    {
+        $categories = $this->categories;
+        return view('admin.shopkeepers.edit', get_defined_vars());
+    }
+
+    public function update(UpdateShopkeeperRequest $request, Shopkeeper $shopkeeper)
+    {
+        $shopkeeper->update($request->all());
+        $shopkeeper->categories()->sync($request->category);
+
+        return redirect(route('shopkeepers.index'))->with('success', 'Shopkeeper updated successfully');
     }
 
     public function status($id)
@@ -63,38 +87,5 @@ class ShopkeeperController extends Controller
         Shopkeeper::where('id', $id)->update(['status' => $status]);
 
         return redirect()->back()->with('success', 'Status Changed Successfully');
-    }
-
-    public function edit(Request $request)
-    {
-        $shopkeepersdata = Shopkeeper::where('id', $request->id)->first();
-        return view('admin.shopkeepers.edit', compact('shopkeepersdata'));
-    }
-
-    public function update(Request $request)
-    {
-
-        $validated = $request->validate([
-            'name' => 'required',
-            'phone' => 'required|string|size:11',
-            'cnic' => 'required|string|size:13',
-            'address' => 'required',
-        ]);
-
-        $shopkeeper = Shopkeeper::where('id', $request->id)->first();
-
-        $shopkeeper->update($validated);
-
-        if ($request->has('shopno') && $request->filled('shopno')) {
-            $shopkeeper->shop_no = $request->input('shopno');
-            $shopkeeper->save();
-        }
-
-        if ($request->has('home_address') && $request->filled('home_address')) {
-            $shopkeeper->home_address = $request->input('home_address');
-            $shopkeeper->save();
-        }
-
-        return redirect(route('manage.shopkeepers'))->with('success', 'Shopkeeper updated successfully');
     }
 }

@@ -9,30 +9,8 @@
             });
 
 
-            $.ajax({
-                url: "{{ route('shopkeepers.index') }}",
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    $(".shopkeepersnum").html(response)
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText)
-                }
-            });
 
-            $.ajax({
-                url: "{{ route('today.funds') }}",
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    // console.log(response)
-                    $(".todayfunds").html(response)
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText)
-                }
-            });
+
 
             $.ajax({
                 url: "{{ route('account.index') }}",
@@ -75,7 +53,7 @@
 
                 if (id != "") {
                     $.ajax({
-                        url: "{{ route('get.shopkeeper') }}",
+                        url: "{{ route('shopkeepers.index') }}",
                         method: "GET",
                         data: {
                             id
@@ -403,7 +381,6 @@
                 $("#saveexpenses_form input[name='billno']").val(billno)
 
             });
-
 
             $("#searchledger_form").on('submit', function(event) {
                 event.preventDefault();

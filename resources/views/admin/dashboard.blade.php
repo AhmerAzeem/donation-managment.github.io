@@ -23,7 +23,7 @@
                         <!-- small box -->
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3 class="todayfunds"></h3>
+                                <h3 class="todayfunds">{{ $todayFunds }}</h3>
 
                                 <p>Today Received Funds</p>
                             </div>
@@ -38,7 +38,7 @@
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h3 class="shopkeepersnum"></h3>
+                                <h3 class="shopkeepersnum">{{ $shopkeepers }}</h3>
 
                                 <p>Total Shopkeepers</p>
                             </div>

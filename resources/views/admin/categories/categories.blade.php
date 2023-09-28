@@ -7,11 +7,11 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Accounts</h1>
+                        <h1 class="m-0">Categories</h1>
                     </div>
                     <div class="col-sm-6">
                         <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-lg">
-                            Add Account
+                            Add Category
                         </button>
 
                     </div>
@@ -51,23 +51,23 @@
                                         @php
                                             $rowNumber = 1;
                                         @endphp
-                                        @forelse ($accounts as $account)
+                                        @forelse ($categories as $category)
                                             <tr>
                                                 <td>{{ $rowNumber++ }}</td>
-                                                <td>{{ $account->name }}</td>
-                                                <td>{{ $account->status }}</td>
+                                                <td>{{ $category->name }}</td>
+                                                <td>{{ $category->status }}</td>
                                                 <td>
-                                                    @if ($account->status == 'Active')
-                                                        <a href="{{ route('account.status', ['id' => $account->id]) }}"
+                                                    @if ($category->status == 'Active')
+                                                        <a href="{{ route('category.status', ['id' => $category->id]) }}"
                                                             class="btn btn-danger">Deactivate</a>
-                                                    @elseif($account->status == 'Inactive')
-                                                        <a href="{{ route('account.status', ['id' => $account->id]) }}"
+                                                    @elseif($category->status == 'Inactive')
+                                                        <a href="{{ route('category.status', ['id' => $category->id]) }}"
                                                             class="btn btn-primary">Activate</a>
                                                     @endif
                                                 </td>
                                             </tr>
                                         @empty
-                                            <p class="lead">You dont have any Account</p>
+                                            <p class="lead">You dont have any Category</p>
                                         @endforelse
 
                                     </tbody>
@@ -85,25 +85,25 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Account</h4>
+                            <h4 class="modal-title">Add Category</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <p class="alert_message alert alert-danger d-none"></p>
-                            <form id="addaccount_form">
+                            <form id="addcategory_form">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="accountname">Account Title</label>
-                                    <input type="text" name="accountname" class="form-control" id="accountname"
+                                    <label for="accountname">Category Title</label>
+                                    <input type="text" name="categoryname" class="form-control" id="categoryname"
                                         placeholder="Enter Name" />
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" form="addaccount_form" class="btn btn-primary">Save changes</button>
+                            <button type="submit" form="addcategory_form" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -111,8 +111,6 @@
                 <!-- /.modal-dialog -->
             </div>
         </section>
-
-
     </div>
-    @include('admin.funds.js.index')
+    @include('admin.categories.js.index')
 @endsection

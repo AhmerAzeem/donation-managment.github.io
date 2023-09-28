@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
-            $table->string('cnic')->unique();
+            $table->string('cnic')->unique()->nullable();
             $table->string('shop_no')->nullable();
             $table->text('address')->nullable();
-            $table->text('home_address')->nullable();
+            $table->string('amount')->nullable();
+            $table->string('category')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->softDeletes();
             $table->timestamps();

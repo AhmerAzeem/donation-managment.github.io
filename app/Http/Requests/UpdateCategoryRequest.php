@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-
-class UpdateShopkeeperRequest extends FormRequest
+class UpdateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +24,9 @@ class UpdateShopkeeperRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'phone' => ['required', Rule::unique('shopkeepers')->whereNull('deleted_at')->ignore($this->shopkeeper->id)],
+            'phone' => ['required', Rule::unique('shopkeepers')],
             'address' => 'required',
             'amount' => 'required',
-
         ];
     }
 }

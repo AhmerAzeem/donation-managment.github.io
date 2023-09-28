@@ -32,16 +32,16 @@
 
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form action="{{ route('edit.shopkeeper') }}" id="quickForm" method="post"
-                                novalidate="novalidate">
+                            <form action="{{ route('shopkeepers.update', $shopkeeper->id) }}" id="quickForm" method="post">
                                 @csrf
+                                @method('PUT')
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
                                         <input type="text" name="name" class="form-control" id="name"
-                                            placeholder="Enter Name" value="{{ $shopkeepersdata->name }}">
+                                            placeholder="Enter Name" value="{{ $shopkeeper->name }}">
                                         <input type="hidden" name="id" class="form-control" id="id"
-                                            value="{{ $shopkeepersdata->id }}">
+                                            value="{{ $shopkeeper->id }}">
                                     </div>
                                     @error('name')
                                         <span class="text-danger">{{ $message }}</span>
@@ -49,7 +49,7 @@
                                     <div class="form-group">
                                         <label for="phone">Phone</label>
                                         <input type="number" name="phone" class="form-control" id="phone"
-                                            placeholder="Enter phone number" value="{{ $shopkeepersdata->phone }}" />
+                                            placeholder="Enter phone number" value="{{ $shopkeeper->phone }}" />
                                         @error('phone')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label for="cnic">C.N.I.C</label>
                                         <input type="number" name="cnic" class="form-control" id="cnic"
-                                            placeholder="Enter CNIC Without dashes" value="{{ $shopkeepersdata->cnic }}" />
+                                            placeholder="Enter CNIC Without dashes" value="{{ $shopkeeper->cnic }}" />
                                         @error('cnic')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -65,21 +65,37 @@
                                     <div class="form-group">
                                         <label for="shopno">Shop No<span style="font-size:12px">(Optional)</span></label>
                                         <input type="number" name="shopno" class="form-control" id="shopno"
-                                            placeholder="Enter shop number" value="{{ $shopkeepersdata->shop_no }}">
+                                            placeholder="Enter shop number" value="{{ $shopkeeper->shop_no }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="address">Address</label>
                                         <input type="text" name="address" class="form-control" id="address"
-                                            placeholder="Enter shop address" value="{{ $shopkeepersdata->address }}" />
+                                            placeholder="Enter shop address" value="{{ $shopkeeper->address }}" />
                                         @error('address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label for="home_address">Home Address <span
-                                                style="font-size:12px">(Optional)</span></label>
-                                        <input type="text" name="home_address" class="form-control" id="home_address"
-                                            placeholder="Enter home address" value="{{ $shopkeepersdata->home_address }}">
+                                        <label for="amount">Amount</label>
+                                        <input type="number" name="amount" class="form-control" id="amount"
+                                            placeholder="Enter Fund amount" value="{{ $shopkeeper->amount }}">
+                                        @error('amount')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Select Category</label>
+                                        <select class="select2bs4 categoryfield" multiple name="category[]"
+                                            data-placeholder="Select a Category" style="width: 100%;">
+                                            <option value="">--Select
+                                                category--</option>
+                                            @foreach ($categories as $item)
+                                                <option value="{{ $item->id }}"
+                                                    @foreach ($shopkeeper->categories as $category)
+                                                        @selected($category->id == $item->id) @endforeach>
+                                                    {{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <!-- /.card-body -->
@@ -103,4 +119,5 @@
         <!-- /.content -->
     </div>
     @include('admin.funds.js.index')
+    @include('admin.shopkeepers.js.edit')
 @endsection

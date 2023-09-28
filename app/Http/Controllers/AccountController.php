@@ -42,7 +42,7 @@ class AccountController extends Controller
 
     public function getAccounts()
     {
-        $accounts = Accounts::all(); // Assuming "Account" is the model name
+        $accounts = Accounts::where('status', "Active")->get();
 
         $accountOptions = [];
 
