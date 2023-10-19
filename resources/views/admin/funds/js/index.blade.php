@@ -8,36 +8,6 @@
                 timer: 3000
             });
 
-
-
-
-
-            $.ajax({
-                url: "{{ route('account.index') }}",
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    var select = $(
-                        '.accountfield'
-                    ); // Assuming '.accountfield' is the class of your select element
-
-                    select.empty(); // Clear existing options
-
-                    select.append($('<option></option>')
-                        .attr('value', '') // Set value to an empty string
-                        .text('Select an Account'));
-
-                    $.each(response, function(value, text) {
-                        select.append($('<option></option>')
-                            .attr('value', value)
-                            .text(text));
-                    });
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
-            });
-
             $("#generatefund input[name='generate']").change(function() {
                 const generatefee = $(this).val();
 

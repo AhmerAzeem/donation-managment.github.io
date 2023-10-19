@@ -82,8 +82,7 @@
                                     <div class="form-group">
                                         <label>Category</label>
                                         <select class="select2bs4 categoryfield" multiple="multiple" name="category[]"
-                                            data-placeholder="Select a Category" style="width: 100%;">
-                                            <option value="">--Select category--</option>
+                                            data-placeholder="--Select category--" style="width: 100%;">
                                             @foreach ($categories as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach

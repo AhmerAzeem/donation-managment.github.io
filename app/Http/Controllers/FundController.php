@@ -21,6 +21,7 @@ class FundController extends Controller
             } elseif ($request->year == '0') {
                 return redirect()->back()->with('year', 'Year field is required');
             }
+
             $successMessage = 'Funds generated successfully';
             $error = false;
 
@@ -154,6 +155,7 @@ class FundController extends Controller
                 $updateamount = Fund::where('id', $data['id'])->update(['due_amount' => $data['due_amount'] - $data['receivedamount']]);
 
                 $dueamount = Fund::where('due_amount', 0)->delete();
+                $dueamount = Fund::where('due_amount', null)->delete();
 
                 $recieveFunds[] = $data['name'];
             }

@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('funds', function (Blueprint $table) {
             $table->id();
             $table->string('shopkeeper_id');
-            $table->string('name');
-            $table->string('month');
-            $table->string('year');
-            $table->string('amount');
-            $table->string('due_amount');
+            $table->string('name')->nullable();
+            $table->string('month')->nullable();
+            $table->string('year')->nullable();
+            $table->string('amount')->nullable();
+            $table->string('due_amount')->nullable();
             $table->timestamps();
         });
     }

@@ -35,7 +35,10 @@
                                                 <label>Select Account</label>
                                                 <select class="form-control select2 accountfield" name="account"
                                                     style="width: 100%;">
-
+                                                    <option value="">--Select an Account--</option>
+                                                    @foreach ($accounts as $account)
+                                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                                    @endforeach
                                                 </select>
                                                 <p class="account_alert text-danger d-none"></p>
                                             </div>
@@ -46,7 +49,6 @@
                                                 <label for="narration">Date</label>
                                                 <input type="date" name="date" class="form-control" id="date">
                                                 <p class="date_alert text-danger d-none"></p>
-
                                             </div>
                                         </div>
                                         <!-- /.col -->
@@ -56,7 +58,6 @@
                                                 <input type="number" name="amount" class="form-control" id="amount"
                                                     placeholder="Enter Amount">
                                                 <p class="amount_alert text-danger d-none"></p>
-
                                             </div>
 
                                         </div>
@@ -66,7 +67,6 @@
                                                 <input type="text" name="narration" class="form-control" id="narration"
                                                     placeholder="Enter Narration">
                                                 <p class="narration_alert text-danger d-none"></p>
-
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -78,7 +78,6 @@
                                         </div>
                                         <!-- /.col -->
                                     </div>
-
                                     <!-- /.row -->
                                 </div>
                                 <div class="card-footer">
@@ -87,15 +86,12 @@
                                 </div>
                             </form>
                             <!-- /.card-body -->
-
                         </div>
                         <!-- /.card -->
                     </div>
-
-
                     <!-- /.col -->
                 </div>
-
+                <!-- row -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-default">
@@ -119,7 +115,6 @@
 
                                         </tbody>
                                     </table>
-
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" id="addexpenseform_btn" form="addexpense_form"

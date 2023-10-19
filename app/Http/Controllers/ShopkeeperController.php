@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\UpdateShopkeeperRequest;
+use App\Http\Requests\ShopkeeperStoreRequest;
 use Illuminate\Http\Request;
 use App\Models\{Shopkeeper, Category, CategoryShopkeeper};
 use Illuminate\Validation\Rule;
@@ -23,7 +23,7 @@ class ShopkeeperController extends Controller
         if (request()->ajax()) {
             return Shopkeeper::find(request()->id)->pluck('name')->first();
         }
-        $shopkeepers = Shopkeeper::with('categories')->orderBy('id', 'desc')->get();
+        $shopkeepers = Shopkeeper::with('categories')->get();
 
         return view('admin.shopkeepers.index', get_defined_vars());
     }
@@ -35,7 +35,7 @@ class ShopkeeperController extends Controller
     }
 
 
-    public function store(CategoryStoreRequest $request)
+    public function store(ShopkeeperStoreRequest $request)
     {
         $shopkeeper = Shopkeeper::create($request->validated());
 

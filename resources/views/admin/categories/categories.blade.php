@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="height: auto">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
@@ -10,7 +10,8 @@
                         <h1 class="m-0">Categories</h1>
                     </div>
                     <div class="col-sm-6">
-                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-lg">
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                            data-target="#modal-lg">
                             Add Category
                         </button>
 

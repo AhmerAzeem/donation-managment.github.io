@@ -27,8 +27,6 @@ class UpdateShopkeeperRequest extends FormRequest
             'name' => 'required',
             'phone' => ['required', Rule::unique('shopkeepers')->whereNull('deleted_at')->ignore($this->shopkeeper->id)],
             'address' => 'required',
-            'amount' => 'required',
-
         ];
     }
 }
