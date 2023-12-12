@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Fund;
 use App\Models\Shopkeeper;
 use App\Models\RecieveFund;
+use App\Models\RemainingFund;
 use Illuminate\Support\Carbon;
 
 class FundController extends Controller
@@ -158,10 +159,31 @@ class FundController extends Controller
                 $dueamount = Fund::where('due_amount', null)->delete();
 
                 $recieveFunds[] = $data['name'];
+
+
+                // Update Remaining Fund
+                $date = date('Y-m-d');
+                $carbonDate = \Carbon\Carbon::createFromFormat('Y-m-d', $date);
+                $month = $carbonDate->format('m');
+
+                $checkRemainingFund = RemainingFund::where('month', $month)->first();
+
+                if (!empty($checkRemainingFund)) {
+                    $newFund = $checkRemainingFund->amount + $data['receivedamount'];
+                    RemainingFund::where('month', $month)->update(['amount' => $newFund]);
+                } else {
+                    $createRemainingFund = RemainingFund::create([
+                        'date' => $date,
+                        'amount' => $data['receivedamount'],
+                        'month' => $month,
+                    ]);
+                }
             }
         }
 
         $recieveFundsname = implode(', ', $recieveFunds);
+
+
 
         return "Funds Recieved Successfully";
     }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Accounts;
 use Illuminate\Http\Request;
 use App\Models\Expenses;
+use App\Models\RecieveFund;
+use App\Models\RemainingFund;
+
 
 class ExpenseController extends Controller
 {
@@ -92,6 +95,10 @@ class ExpenseController extends Controller
 
         $expenses = [];
 
+        $date = date('Y-m-d');
+        $carbonMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $date);
+        $todayMonth = $carbonMonth->format('m');
+
         foreach ($requestData as $data) {
 
             $expense = Expenses::create([
@@ -99,14 +106,35 @@ class ExpenseController extends Controller
                 'narration' => $data['narration'],
                 'amount' => $data['amount'],
                 'date' => $data['date'],
+                'month' => $todayMonth,
             ]);
 
             if (isset($data['billno']) && !empty($data['billno'])) {
                 $expense->bill_no = $data['billno'];
                 $expense->save();
             }
-        }
 
+            $carbonDate = \Carbon\Carbon::createFromFormat('Y-m-d', $data['date']);
+            $month = $carbonDate->format('m');
+
+            $recievedFund = RecieveFund::where('month',  $month)->sum('amount');
+
+            $thisMonthExpense = Expenses::where('month', $month)->sum('amount');
+
+            $remainingFund = $recievedFund - $thisMonthExpense;
+
+            $checkRemainingFund = RemainingFund::where('month', $month)->first();
+
+            if (!empty($checkRemainingFund)) {
+                RemainingFund::where('month', $month)->update(['amount' => $remainingFund]);
+            } else {
+                $createRemainingFund = RemainingFund::create([
+                    'date' => $date,
+                    'amount' => $remainingFund,
+                    'month' => $month,
+                ]);
+            }
+        }
         return "Expense Added successfully";
     }
 

@@ -6,10 +6,12 @@ use App\Http\Controllers\FundController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Models\Expenses;
 use App\Models\RecieveFund;
 use App\Models\Shopkeeper;
 use App\Models\Accounts;
+use App\Models\RemainingFund;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +30,7 @@ Route::get('/', [ExpenseController::class, 'index'])->name('home');
 Route::get('/get-expense', [ExpenseController::class, 'getExpenses'])->name('get.expenses');
 
 // Dashboard Routes
-Route::group(['prefix' => 'head-admin'], function () {
+Route::group(['prefix' => 'head-admin', 'middleware' => 'auth'], function () {
 
     // Login Route
     Route::get('/', function () {
@@ -36,18 +38,7 @@ Route::group(['prefix' => 'head-admin'], function () {
     });
 
     // Dashboard Route
-    Route::get('dashboard', function () {
-        $todayFunds = RecieveFund::where('date', date('Y-m-d'))->sum('amount');
-        $date = date('Y-m-d');
-        $carbonDate = \Carbon\Carbon::createFromFormat('Y-m-d', $date);
-        $month = $carbonDate->format('m');
-        $shopkeepers = Shopkeeper::count();
-        $shopkeeper_fund = RecieveFund::whereMonth('date', $month)->sum('amount');
-        $totalExpense = Expenses::whereMonth('date', $month)->sum('amount');
-        $remainingFund = $shopkeeper_fund - $totalExpense;
-
-        return view('admin.dashboard', get_defined_vars());
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Profile Routes
     Route::as('profile.')->middleware('auth')->group(function () {

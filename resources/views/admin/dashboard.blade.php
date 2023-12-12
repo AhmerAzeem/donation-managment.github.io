@@ -85,7 +85,7 @@
                         <!-- small box -->
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3 class="todayfunds">{{ $remainingFund }}</h3>
+                                <h3 class="todayfunds">{{ $remainingamount }}</h3>
                                 <p>Total Remaining Fund</p>
                             </div>
                             <div class="icon">
