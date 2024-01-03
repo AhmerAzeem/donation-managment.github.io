@@ -23,7 +23,7 @@ class ShopkeeperController extends Controller
         if (request()->ajax()) {
             return Shopkeeper::find(request()->id)->pluck('name')->first();
         }
-        $shopkeepers = Shopkeeper::with('categories')->get();
+        $shopkeepers = Shopkeeper::with('categories')->where('status', 'Active')->get();
 
         return view('admin.shopkeepers.index', get_defined_vars());
     }

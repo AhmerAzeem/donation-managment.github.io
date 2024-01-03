@@ -125,15 +125,22 @@ class ExpenseController extends Controller
 
             $checkRemainingFund = RemainingFund::where('month', $month)->first();
 
-            if (!empty($checkRemainingFund)) {
-                RemainingFund::where('month', $month)->update(['amount' => $remainingFund]);
-            } else {
-                $createRemainingFund = RemainingFund::create([
-                    'date' => $date,
-                    'amount' => $remainingFund,
-                    'month' => $month,
-                ]);
-            }
+            $totalRemaining = RemainingFund::where('month', 'total_amount')->first();
+
+            $newRemaining = $totalRemaining->amount - $expense->amount;
+
+            $totalRemaining->amount = $newRemaining;
+            $totalRemaining->save();
+
+            // if (!empty($checkRemainingFund)) {
+            // RemainingFund::where('month', $month)->update(['amount' => $remainingFund]);
+            // } else {
+            // $createRemainingFund = RemainingFund::create([
+            // 'date' => $date,
+            // 'amount' => $remainingFund,
+            // 'month' => $month,
+            // ]);
+            // }
         }
         return "Expense Added successfully";
     }

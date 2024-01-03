@@ -134,9 +134,10 @@ class FundController extends Controller
 
         foreach ($requestData as $data) {
             if (isset($data['receivedamount']) && $data['receivedamount'] !== "NaN") {
-                $recievedFund = RecieveFund::where('id', $data['id'])->first();
+                $recievedFund = RecieveFund::where('id', $data['id'])->where('month', 11)->first();
 
-                if (!$recievedFund) {
+
+                if (is_null($recievedFund)) {
                     $recieveFund = RecieveFund::create([
                         'shopkeeper_id' => $data['shopkeeper_id'],
                         'month' => $data['month'],
@@ -151,6 +152,7 @@ class FundController extends Controller
                     $recievedFund->amount = $oldReceivedFund + $data['receivedamount'];
                     $recievedFund->save();
                 }
+
 
 
                 $updateamount = Fund::where('id', $data['id'])->update(['due_amount' => $data['due_amount'] - $data['receivedamount']]);
